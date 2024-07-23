@@ -1,0 +1,37 @@
+import yt_dlp
+
+def download_video(url, save_path):
+    ydl_opts = {
+        'format': 'bestvideo+bestaudio/best',
+        'outtmpl': save_path + '/%(title)s.%(ext)s',
+    }
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([url])
+
+def download_audio(url, save_path):
+    ydl_opts = {
+        'format': 'bestaudio/best',
+        'postprocessors': [{
+            'key': 'FFmpegExtractAudio',
+            'preferredcodec': 'mp3',
+            'preferredquality': '192',
+        }],
+        'outtmpl': save_path + '/%(title)s.%(ext)s',
+    }
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        ydl.download([url])
+
+def main():
+    choice = input("Enter 'v' to download video or 'a' to download audio: ").lower()
+    url = input("Enter the YouTube URL: ")
+    save_path = input("Enter the save path: ")
+
+    if choice == 'v':
+        download_video(url, save_path)
+    elif choice == 'a':
+        download_audio(url, save_path)
+    else:
+        print("Invalid choice. Please enter 'v' for video or 'a' for audio.")
+
+if __name__ == "__main__":
+    main()
